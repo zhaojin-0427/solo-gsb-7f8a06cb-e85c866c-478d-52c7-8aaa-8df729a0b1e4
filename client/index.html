@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>图像节点图预览 · WebGL2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>图像节点图预览 <small>WebGL2 · 线性 RGB · 预乘 Alpha · 跨帧反馈</small></h1>
+    <div id="hud">
+      <span id="st-state" class="pill">—</span>
+      <span id="st-frame" class="pill">帧 —</span>
+      <span id="st-rev" class="pill">修订 r0</span>
+      <span id="st-pool" class="pill dim">纹理池 —</span>
+    </div>
+  </header>
+
+  <div id="fatal" class="banner fatal" hidden></div>
+  <div id="lost-banner" class="banner lost" hidden>
+    ⚠ WebGL 上下文已丢失（模拟）。GPU 资源已失效，帧号保持不变。
+    <button id="btn-restore">恢复上下文</button>
+  </div>
+
+  <main>
+    <section id="left">
+      <div id="palette">
+        <span class="lbl">添加节点：</span>
+        <button data-add="input">输入</button>
+        <button data-add="matrix">颜色矩阵</button>
+        <button data-add="blur">模糊</button>
+        <button data-add="blend">混合</button>
+        <button data-add="prev">上一帧</button>
+        <span class="sep"></span>
+        <button id="btn-revert" title="放弃草稿中的未通过修改，回到活动修订">放弃草稿</button>
+      </div>
+      <div id="editor"></div>
+      <div id="error-bar" hidden></div>
+    </section>
+
+    <aside id="right">
+      <canvas id="preview" width="512" height="512"></canvas>
+      <div class="controls">
+        <button id="btn-play" class="primary">暂停</button>
+        <button id="btn-step">单步</button>
+        <button id="btn-export">导出 PNG</button>
+      </div>
+      <div class="row">
+        <label>尺寸
+          <input id="in-w" type="number" min="16" max="2048" step="1" value="512"> ×
+          <input id="in-h" type="number" min="16" max="2048" step="1" value="512">
+        </label>
+      </div>
+      <div class="row">
+        <button id="btn-lose" class="danger">模拟上下文丢失</button>
+      </div>
+      <fieldset>
+        <legend>示例</legend>
+        <button id="ex-feedback">半透明反馈</button>
+        <button id="ex-basic">基础链</button>
+        <button id="ex-cycle">循环拒绝</button>
+      </fieldset>
+      <div id="status-line"></div>
+      <details id="help">
+        <summary>操作说明</summary>
+        <ul>
+          <li>拖动节点标题移动；从右侧「输出」圆点拖到左侧输入圆点连线。</li>
+          <li>点击连线选中后按 Delete 删除，或右键连线直接删除。</li>
+          <li>节点头 ◎ 设为输出节点；× 删除节点（释放其 GPU 资源）。</li>
+          <li>每次修改都会作为完整候选验证：成功则从第 0 帧启用新修订；失败（如成环）保留旧图继续运行。</li>
+          <li>「上一帧」节点允许成环：它输出上一完整帧的反馈源，首帧为透明。</li>
+          <li>暂停 / 单步 / 导出 / 继续共用同一帧编号；导出的 PNG 为普通 sRGB。</li>
+        </ul>
+      </details>
+    </aside>
+  </main>
+
+  <script type="module" src="dist/main.js"></script>
+</body>
+</html>

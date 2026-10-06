@@ -1,0 +1,173 @@
+:root {
+  --bg: #14161a;
+  --panel: #1d2026;
+  --panel2: #23262e;
+  --line: #333844;
+  --text: #d8dce4;
+  --dim: #8a90a0;
+  --accent: #4fc3f7;
+  --ok: #7bd88a;
+  --warn: #ffca28;
+  --err: #ff6b6b;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 16px; background: var(--panel); border-bottom: 1px solid var(--line);
+}
+header h1 { font-size: 16px; margin: 0; font-weight: 600; }
+header h1 small { color: var(--dim); font-weight: 400; font-size: 12px; margin-left: 8px; }
+
+#hud { display: flex; gap: 8px; }
+.pill {
+  background: var(--panel2); border: 1px solid var(--line); border-radius: 12px;
+  padding: 2px 10px; font-size: 12px; white-space: nowrap;
+}
+.pill.dim { color: var(--dim); }
+
+.banner { padding: 8px 16px; font-size: 13px; }
+.banner.fatal { background: #4a1d1d; color: #ffb3b3; }
+.banner.lost { background: #4a3a10; color: #ffe08a; display: flex; gap: 12px; align-items: center; }
+
+main { flex: 1; display: flex; min-height: 0; }
+
+#left { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+#palette {
+  display: flex; align-items: center; gap: 6px; padding: 8px 12px;
+  background: var(--panel); border-bottom: 1px solid var(--line);
+}
+#palette .lbl { color: var(--dim); font-size: 12px; }
+#palette .sep { flex: 1; }
+
+#editor { flex: 1; overflow: auto; position: relative; background: #101216; }
+
+.ed-canvas { position: relative; width: 2400px; height: 1600px; }
+svg.edges { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.edge {
+  fill: none; stroke: #7d8494; stroke-width: 2; pointer-events: stroke; cursor: pointer;
+}
+.edge:hover { stroke: #c8cede; }
+.edge.sel { stroke: var(--warn); }
+.edge.pending { stroke: var(--accent); stroke-dasharray: 5 4; pointer-events: none; }
+.nodes { position: absolute; inset: 0; }
+
+.node {
+  position: absolute; min-width: 170px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 8px; user-select: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,.4);
+}
+.node.is-output { border-color: var(--accent); }
+.node.err { border-color: var(--err); }
+.node.warn { border-color: var(--warn); }
+
+.nhead {
+  display: flex; align-items: center; gap: 6px; padding: 6px 8px;
+  background: var(--panel2); border-bottom: 1px solid var(--line);
+  border-radius: 8px 8px 0 0; cursor: grab;
+}
+.nhead:active { cursor: grabbing; }
+.ntitle { flex: 1; font-size: 12px; font-weight: 600; }
+.ntitle em { color: var(--dim); font-style: normal; font-weight: 400; }
+.nhead button {
+  background: none; border: none; color: var(--dim); cursor: pointer;
+  font-size: 14px; padding: 0 2px;
+}
+.nhead button:hover { color: var(--text); }
+.node.is-output .nout { color: var(--accent); }
+
+.nbody { padding: 6px 8px 8px; font-size: 12px; }
+.pin { position: relative; padding: 3px 0 3px 12px; color: var(--dim); }
+.pout { position: relative; padding: 3px 12px 3px 0; text-align: right; color: var(--dim); }
+.port {
+  position: absolute; top: 50%; width: 12px; height: 12px; margin-top: -6px;
+  border-radius: 50%; background: var(--bg); border: 2px solid var(--dim); cursor: crosshair;
+}
+.port:hover { border-color: var(--accent); }
+.port.in { left: -6px; }
+.port.out { right: -6px; }
+
+.params { margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+.params select {
+  width: 100%; background: var(--panel2); color: var(--text);
+  border: 1px solid var(--line); border-radius: 4px; padding: 3px;
+}
+.file-row { display: flex; align-items: center; gap: 6px; }
+.fname { color: var(--dim); font-size: 11px; }
+.slider-row { display: flex; align-items: center; gap: 8px; }
+.slider-row input[type=range] { flex: 1; }
+.slider-row span { color: var(--dim); font-size: 11px; white-space: nowrap; }
+.note { color: var(--dim); font-size: 11px; }
+
+.mgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
+.mgrid input {
+  width: 100%; min-width: 0; background: var(--panel2); color: var(--text);
+  border: 1px solid var(--line); border-radius: 3px; padding: 2px 3px; font-size: 11px;
+}
+.mgrid input.off { border-color: #4a5468; }
+
+.badge {
+  position: absolute; top: -8px; right: -8px; z-index: 2;
+  background: var(--err); color: #fff; border-radius: 10px;
+  font-size: 10px; padding: 1px 6px; cursor: help;
+}
+.node.warn .badge { background: var(--warn); color: #222; }
+
+#error-bar {
+  padding: 8px 12px; background: #3a1c1c; color: #ffb3b3;
+  border-top: 1px solid #5a2626; font-size: 13px;
+}
+
+#right {
+  width: 460px; flex: none; padding: 12px; overflow-y: auto;
+  background: var(--panel); border-left: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+#preview {
+  width: 100%; height: auto; display: block;
+  background: #0a0b0d; border: 1px solid var(--line); border-radius: 6px;
+}
+
+.controls { display: flex; gap: 8px; }
+.controls button { flex: 1; }
+
+button {
+  background: var(--panel2); color: var(--text); border: 1px solid var(--line);
+  border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px;
+}
+button:hover { border-color: var(--accent); }
+button.primary { background: #16405a; border-color: #1f5c80; }
+button.danger { background: #402020; border-color: #6a3030; }
+
+.row { display: flex; align-items: center; gap: 8px; }
+.row label { display: flex; align-items: center; gap: 6px; color: var(--dim); }
+.row input[type=number] {
+  width: 70px; background: var(--panel2); color: var(--text);
+  border: 1px solid var(--line); border-radius: 4px; padding: 4px 6px;
+}
+
+fieldset {
+  border: 1px solid var(--line); border-radius: 6px;
+  display: flex; gap: 6px; padding: 8px;
+}
+fieldset legend { color: var(--dim); font-size: 12px; padding: 0 4px; }
+fieldset button { flex: 1; font-size: 12px; padding: 5px 6px; }
+
+#status-line { color: var(--ok); font-size: 12px; min-height: 18px; }
+
+#help { color: var(--dim); font-size: 12px; }
+#help summary { cursor: pointer; }
+#help ul { margin: 6px 0; padding-left: 18px; }

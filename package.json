@@ -1,0 +1,15 @@
+{
+  "name": "node-graph-preview",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WebGL2 图像节点图预览：线性 RGB / 预乘 alpha / 跨帧反馈",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node -e \"require('fs').writeFileSync('client/dist/package.json', JSON.stringify({type:'module'}))\"",
+    "test": "node test/graph.test.mjs && node test/engine.test.mjs",
+    "start": "node server/server.js",
+    "dev": "npm run build && npm start"
+  },
+  "devDependencies": {
+    "typescript": "5.5"
+  }
+}
