@@ -1,0 +1,15 @@
+{
+  "name": "node-graph-preview",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WebGL2 image node-graph preview with frame feedback, revisions and context-loss recovery",
+  "scripts": {
+    "build": "esbuild src/app.ts --bundle --outfile=public/app.js --format=iife --target=es2020",
+    "typecheck": "tsc --noEmit",
+    "start": "node server/server.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.2",
+    "typescript": "^5.4.5"
+  }
+}

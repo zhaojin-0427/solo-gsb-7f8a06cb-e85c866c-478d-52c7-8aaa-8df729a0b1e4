@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>图像节点图预览 · WebGL2</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>图像节点图预览</h1>
+    <div id="status">初始化…</div>
+  </header>
+
+  <div id="toolbar">
+    <div class="group">
+      <button id="btnRun">暂停</button>
+      <button id="btnStep">单步</button>
+      <button id="btnExport">导出 PNG</button>
+    </div>
+    <div class="group">
+      <button id="btnLoss" class="warn">模拟上下文丢失</button>
+      <button id="btnRestore">恢复上下文</button>
+    </div>
+    <div class="group">
+      <button id="btnExampleFeedback">示例：半透明反馈</button>
+      <button id="btnExampleCycle">示例：循环依赖（应被拒绝）</button>
+    </div>
+    <div class="group">
+      <label>尺寸</label>
+      <input id="sizeW" type="number" min="16" max="2048" step="1" />
+      <span>×</span>
+      <input id="sizeH" type="number" min="16" max="2048" step="1" />
+    </div>
+  </div>
+
+  <main>
+    <aside id="panel">
+      <div id="addNode">
+        <button data-type="input">+ 输入</button>
+        <button data-type="colormatrix">+ 颜色矩阵</button>
+        <button data-type="blur">+ 模糊</button>
+        <button data-type="blend">+ 混合</button>
+        <button data-type="prevframe">+ 上一帧</button>
+      </div>
+      <div id="errors"></div>
+      <div id="nodes">
+        <svg id="edges"></svg>
+        <div id="nodeList"></div>
+      </div>
+    </aside>
+    <section id="stage">
+      <div id="canvasWrap"><canvas id="view" width="512" height="512"></canvas></div>
+      <div id="hint">
+        内部：线性 RGB + 预乘 alpha（优先 RGBA16F）；显示与导出：sRGB PNG。
+        橙色虚线为反馈边（读取上一完整帧）。点击节点「预览」可查看任意节点输出。
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
